@@ -10,25 +10,24 @@
 #pragma endregion
 #pragma region Defines
 #define DEVICE_ROUTER 0
-#define LED_PIN 0
+#define DEVICE_RAD 1
+#define LED_PIN 3
 #define LED_COUNT 0
 #pragma endregion
 const uint8_t DEVICE = DEVICE_ROUTER;
 
 void OnReceived(uint8_t* data, uint8_t length)
 {
-    printf("Received: %.*s\n", length, (char*)data);
+    
 }
 void Start()
 {
     stdio_init_all();
     Net_Start(DEVICE, OnReceived, DEVICE == 0);
-    LED_Start(LED_PIN, LED_COUNT);
 }
 void Update()
 {
     Net_Update();
-    LED_Update();
 }
 int main()
 {
