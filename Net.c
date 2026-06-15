@@ -17,10 +17,6 @@ void Net_Start(uint8_t _deviceID, Net_OnReceive _callback, bool _isRouter)
 }
 void Net_Send(uint8_t ep, uint8_t* data, uint8_t length)
 {
-    printf("Sending: ");
-    for (uint8_t i = 0; i < length; i++)
-        printf("%02X ", data[i]);
-    printf("\n");
     uart_write_blocking(uart0, sync, 2);
     uart_write_blocking(uart0, &ep, 1);
     uart_write_blocking(uart0, &length, 1);
@@ -37,8 +33,10 @@ void Net_Update()
     static uint8_t lastByte;
     synced = false;
     lastByte = uart_getc(uart0);
-    while(!synced && uart_is_readable(uart0))
+    while(!synced)
     {
+        if(!uart_is_readable(uart0))
+            return;
         if(lastByte == sync[0])
         {
             lastByte = uart_getc(uart0);
@@ -47,16 +45,13 @@ void Net_Update()
         }
         lastByte = uart_getc(uart0);
     }
-    if(!uart_is_readable(uart0) || !synced)
+    if(!synced)
         return;
     uart_read_blocking(uart0, &ep, 1);
     uart_read_blocking(uart0, &length, 1);
     uart_read_blocking(uart0, data, length);
     if(ep == deviceID)
-    {
         onReceive(data, length);
-        return;
-    }
-    if(isRouter)
+    else if(isRouter)
         Net_Send(ep, data, length);
 }
