@@ -1,12 +1,8 @@
 #pragma region Includes
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "hardware/dma.h"
-#include "hardware/pio.h"
-#include "hardware/clocks.h"
-#include "hardware/uart.h"
 #include "Net.h"
-#include "LED.h"
+#include "Device_RAD.h"
 #pragma endregion
 #pragma region Defines
 #define DEVICE_ROUTER 0
@@ -14,25 +10,28 @@
 #define DEVICE_PC 255
 #define LED_PIN 3
 #define LED_COUNT 0
+#define RAD_MOTOR_IN1 2
+#define RAD_MOTOR_IN2 3
 #pragma endregion
-const uint8_t DEVICE = DEVICE_ROUTER;
+const uint8_t DEVICE = DEVICE_RAD;
 
-void OnReceived(uint8_t* data, uint8_t length)
-{
-    
-}
-void Start()
-{
-    stdio_init_all();
-    Net_Start(DEVICE, OnReceived, DEVICE == DEVICE_ROUTER);
-}
-void Update()
-{
-    Net_Update();
-}
 int main()
 {
-    Start();
-    while (true)
-        Update();
+    stdio_init_all();
+    gpio_init(25);
+    gpio_set_dir(25, true);
+    gpio_put(25, false);
+    Net_Start(DEVICE, DEVICE == DEVICE_ROUTER);
+    switch (DEVICE)
+    {
+        case DEVICE_RAD:
+            RAD_Start();
+            gpio_put(25, true);
+            while (true)
+                RAD_Update();
+            break;
+        default:
+            return -1;
+    }
+    gpio_put(25, false);
 }

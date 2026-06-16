@@ -37,8 +37,10 @@ pico_sdk_init()
 
 add_executable(HWP_Firmware
     HWP_Firmware.c
+    Device_RAD.c
     Net.c
     LED.c
+    Motor.c
 )
 
 pico_set_program_name(HWP_Firmware "HWP_Firmware")

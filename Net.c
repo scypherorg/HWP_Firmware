@@ -7,14 +7,17 @@ uint8_t deviceID = 0;
 typedef void (*Net_OnReceive)(uint8_t *data, uint8_t length);
 static Net_OnReceive onReceive;
 const uint8_t sync[2] = {0x11, 0xAA};
-void Net_Start(uint8_t _deviceID, Net_OnReceive _callback, bool _isRouter)
+void Net_Start(uint8_t _deviceID, bool _isRouter)
 {
     deviceID = _deviceID;
     isRouter = _isRouter;
-    onReceive = _callback;
     uart_init(uart0, 115200);
     gpio_set_function(0, GPIO_FUNC_UART);
     gpio_set_function(1, GPIO_FUNC_UART);
+}
+void Net_SetCallback(Net_OnReceive _callback)
+{
+    onReceive = _callback;
 }
 void Net_Send(uint8_t ep, uint8_t* data, uint8_t length)
 {
