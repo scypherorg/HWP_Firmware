@@ -67,4 +67,3 @@ target_link_libraries(HWP_Firmware
         )
 
 pico_add_extra_outputs(HWP_Firmware)
-
