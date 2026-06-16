@@ -11,6 +11,7 @@
 #pragma region Defines
 #define DEVICE_ROUTER 0
 #define DEVICE_RAD 1
+#define DEVICE_PC 255
 #define LED_PIN 3
 #define LED_COUNT 0
 #pragma endregion
@@ -23,7 +24,7 @@ void OnReceived(uint8_t* data, uint8_t length)
 void Start()
 {
     stdio_init_all();
-    Net_Start(DEVICE, OnReceived, DEVICE == 0);
+    Net_Start(DEVICE, OnReceived, DEVICE == DEVICE_ROUTER);
 }
 void Update()
 {
