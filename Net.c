@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "string.h"
 #include "hardware/uart.h"
 bool isRouter = false;
 uint8_t deviceID = 0;
