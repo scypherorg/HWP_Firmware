@@ -7,6 +7,7 @@
 #pragma region Defines
 #define DEVICE_ROUTER 0
 #define DEVICE_RAD 1
+#define DEVICE_BARRIER 2
 #define DEVICE_PC 255
 #define LED_PIN 3
 #define LED_COUNT 0

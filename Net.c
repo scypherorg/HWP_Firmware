@@ -29,20 +29,26 @@ void Net_Send(uint8_t ep, uint8_t* data, uint8_t length)
 void forwardSerial()
 {
     static char serial[255];
+    int c = getchar_timeout_us(0);
+    if(c == PICO_ERROR_TIMEOUT)
+        return;
     if(!fgets(serial, sizeof(serial), stdin))
         return;
     uint8_t length = strlen(serial);
+    printf("S_ACK: %s", serial);
     if(length < 2)
         return;
-    uint8_t ep = serial[0] - '0';
+    uint8_t ep = c - '0';
     if(serial[length-1] == '\n')
         serial[--length] = '\0';
-    Net_Send(ep, (uint8_t *)&serial[1], length - 1);
+    if(isRouter)
+        Net_Send(ep, (uint8_t *)&serial[0], length);
+    else
+        onReceive((uint8_t *)&serial[0], length);
 }
 void Net_Update()
 {
-    if(isRouter)
-        forwardSerial();
+    forwardSerial();
     if(!uart_is_readable(uart0))
         return;
     static uint8_t ep = 0;
