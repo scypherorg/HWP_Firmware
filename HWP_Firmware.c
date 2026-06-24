@@ -3,18 +3,15 @@
 #include "pico/stdlib.h"
 #include "Net.h"
 #include "Device_RAD.h"
+#include "Device_Barrier.h"
 #pragma endregion
 #pragma region Defines
 #define DEVICE_ROUTER 0
 #define DEVICE_RAD 1
 #define DEVICE_BARRIER 2
 #define DEVICE_PC 255
-#define LED_PIN 3
-#define LED_COUNT 0
-#define RAD_MOTOR_IN1 2
-#define RAD_MOTOR_IN2 3
 #pragma endregion
-const uint8_t DEVICE = DEVICE_RAD;
+const uint8_t DEVICE = DEVICE_BARRIER;
 
 int main()
 {
@@ -30,6 +27,12 @@ int main()
             gpio_put(25, true);
             while (true)
                 RAD_Update();
+            break;
+        case DEVICE_BARRIER:
+            Barrier_Start();
+            gpio_put(25, true);
+            while (true)
+                Barrier_Update();
             break;
         default:
             return -1;

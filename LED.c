@@ -13,20 +13,27 @@ uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b)
 }
 void LED_Start(uint pin, uint16_t _ledCount)
 {
-    led_program_init(pio0, 0, pio_add_program(pio0, &led_program), pin, 800000, false);
+    ledCount = _ledCount;
     uint32_t c[ledCount];
     color = c;
-    ledCount = _ledCount;
+    if(ledCount == 1)
+    {
+        gpio_init(pin);
+        gpio_set_dir(pin, true);
+        gpio_put(pin, true);
+        return;
+    }
+    led_program_init(pio0, 0, pio_add_program(pio0, &led_program), pin, 800000, false);
 }
 void LED_Update()
 {
-    if(!hasChanged)
+    if(!hasChanged || ledCount == 1)
         return;
     for (uint16_t i = 0; i < ledCount; i++)
         pio_sm_put_blocking(pio0, 0, color[i]);
     hasChanged = false;
 }
-void LED_setColor(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
+void LED_SetColor(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
 {
     while (index > ledCount)
         index -= ledCount;
@@ -34,4 +41,9 @@ void LED_setColor(uint16_t index, uint8_t r, uint8_t g, uint8_t b)
         index += ledCount;
     color[index] = urgb_u32(r, g, b)<<8u;
     hasChanged = true;
+}
+void LED_SetEnabled(uint8_t ledPin, bool enabled)
+{
+    if(ledCount == 1)
+        gpio_put(ledPin, enabled);
 }

@@ -13,8 +13,8 @@
 #define MODE_DOWN 3
 #define MODE_WAITING 4
 uint8_t LDR_ID;
-uint8_t mode = 0;
-absolute_time_t timerStart;
+static uint8_t mode = 0;
+static absolute_time_t timerStart;
 void goUp()
 {
     Motor_SetSpeed(MOTOR_SPEEDUP);
@@ -65,7 +65,8 @@ void RAD_Start()
 void RAD_Update()
 {
     Net_Update();
-    LDR_Triggered(LDR_ID);
+    printf("LDR Triggered: %s\n", LDR_Triggered(LDR_ID) ? "Yes" : "No");
+    sleep_ms(100);
     switch (mode)
     {
         case MODE_DISPENSE:

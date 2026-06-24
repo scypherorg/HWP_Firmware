@@ -35,6 +35,16 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
+add_executable(HWP_Firmware
+    HWP_Firmware.c
+    Device_RAD.c
+    Device_Barrier.c
+    Net.c
+    LED.c
+    Motor.c
+    LDR.c
+    Servo.c
+)
 
 pico_set_program_name(HWP_Firmware "HWP_Firmware")
 pico_set_program_version(HWP_Firmware "0.1")
@@ -62,15 +72,5 @@ target_link_libraries(HWP_Firmware
         hardware_adc
         hardware_pwm
         )
-
-add_executable(HWP_Firmware
-    HWP_Firmware.c
-    Device_RAD.c
-    Device_Barrier.c
-    Net.c
-    LED.c
-    Motor.c
-    LDR.c
-)
 
 pico_add_extra_outputs(HWP_Firmware)

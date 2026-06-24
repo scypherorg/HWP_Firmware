@@ -31,6 +31,5 @@ bool LDR_Triggered(uint8_t id)
         threshold[id]++;
     if(sum + THRESHOLD_MARGIN < threshold[id])
         threshold[id]--;
-    gpio_put(25, sum > threshold[id]);
     return sum > threshold[id];
 }
